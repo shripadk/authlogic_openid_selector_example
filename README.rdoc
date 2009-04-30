@@ -1,1 +1,30 @@
-This branch uses the official {authlogic\_openid}[http://github.com/binarylogic/authlogic_openid/tree/master] library. For more information on this application please see the {master branch}[http://github.com/binarylogic/authlogic_example/tree/master].
+= Authlogic OpenID-Selector Example
+
+This is an example of how to use Authlogic in combination with the Javascript OpenID-Selector in a Rails app. 
+
+<b>Please check the following pages to find more information about the applications used to build this example:</b>
+
+* Original Authlogic Example App: http://authlogicexample.binarylogic.com
+* Authlogic: http://github.com/binarylogic/authlogic
+* Authlogic OpenID: http://github.com/binarylogic/authlogic_openid
+* Javascript OpenID-Selector (based on JQuery): http://code.google.com/p/openid-selector/
+
+== What does this example app contain?
+
+1. OpenID User registration using Javascript OpenID-Selector.
+2. Automatically log users in upon successful OpenID registration, saving his OpenID identifier and email address.
+3. A my account area where the user can view / delete his account.
+4. Login/Logout functionality.
+5. Automatically store information on the users and their session in the databases. Such as login count, IP address, when they logged in last, and when their last activity occurred.
+6. Count how many users are logged in / out in your system.
+
+== Current Issues
+
+* Needs to be tested using other OpenID accounts besides Google and Yahoo
+* Yahoo currently doesn't provide the user's email by SReg or AX.
+
+== TODO
+
+* Port Javascript OpenID-Selector  to the Prototype JS library.
+* Implement Facebook login into this app (waiting for Authlogic Facebook module).
+* Use this application to build a Rails plugin.
