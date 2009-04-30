@@ -28,3 +28,7 @@ This is an example of how to use Authlogic in combination with the Javascript Op
 * Port Javascript OpenID-Selector  to the Prototype JS library.
 * Implement Facebook login into this app (waiting for Authlogic Facebook module).
 * Use this application to build a Rails plugin.
+
+== Misc.
+
+This is my first Github and Git project, so please be patient and give me feedback if anything isn't working as you would expect. :-)
