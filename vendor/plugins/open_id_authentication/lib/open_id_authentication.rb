@@ -145,6 +145,7 @@ module OpenIdAuthentication
       open_id_request = open_id_consumer.begin(identity_url)
       add_simple_registration_fields(open_id_request, options)
       add_ax_fields(open_id_request, options)
+      
       redirect_to(open_id_redirect_url(open_id_request, return_to, method))
     rescue OpenIdAuthentication::InvalidOpenId => e
       yield Result[:invalid], identity_url, nil
@@ -158,7 +159,6 @@ module OpenIdAuthentication
       params_with_path.delete(:format)
       open_id_response = timeout_protection_from_identity_server { open_id_consumer.complete(params_with_path, requested_url) }
       identity_url     = normalize_identifier(open_id_response.display_identifier) if open_id_response.display_identifier
-
       case open_id_response.status
       when OpenID::Consumer::SUCCESS
         profile_data = {}
@@ -169,7 +169,7 @@ module OpenIdAuthentication
             profile_data.merge! data_response.from_success_response( open_id_response ).data
           end
         end
-        
+
         yield Result[:successful], identity_url, profile_data
       when OpenID::Consumer::CANCEL
         yield Result[:canceled], identity_url, nil
@@ -186,7 +186,6 @@ module OpenIdAuthentication
 
     def add_simple_registration_fields(open_id_request, fields)
       sreg_request = OpenID::SReg::Request.new
-      
       # filter out AX identifiers (URIs)
       required_fields = fields[:required].collect { |f| f.to_s unless f =~ /^https?:\/\// }.compact
       optional_fields = fields[:optional].collect { |f| f.to_s unless f =~ /^https?:\/\// }.compact

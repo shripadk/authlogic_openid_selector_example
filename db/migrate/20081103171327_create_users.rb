@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :crypted_password
       t.string :password_salt
       t.string :email, :null => false
-      t.string :openid_identifier
+      t.string :openid_identifier, :null => false
       t.string :persistence_token, :null => false
       t.integer :login_count, :default => 0, :null => false
       t.datetime :last_request_at
