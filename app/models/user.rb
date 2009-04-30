@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   acts_as_authentic do |c| 
     c.validate_login_field = false
-    # optional, but if you register by openid, i want you at least to share your email-address
+    # optional, but if a user registers by openid, he should at least share his email-address with the app
     c.validate_email_field = true
     # fetch the email either by sreg or ax
     c.required_fields = [:email,"http://axschema.org/contact/email"]
