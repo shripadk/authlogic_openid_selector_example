@@ -169,7 +169,6 @@ module OpenIdAuthentication
             profile_data.merge! data_response.from_success_response( open_id_response ).data
           end
         end
-
         yield Result[:successful], identity_url, profile_data
       when OpenID::Consumer::CANCEL
         yield Result[:canceled], identity_url, nil
