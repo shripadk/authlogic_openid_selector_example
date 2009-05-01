@@ -26,6 +26,10 @@ var providers_large = {
     }
 };
 var providers_small = {
+	windowslive: {
+        name: 'WindowsLive',
+        url: 'http://OpenID.Live-INT.com/'
+    },
     myopenid: {
         name: 'MyOpenID',
         label: 'Enter your MyOpenID username.',
@@ -60,11 +64,6 @@ var providers_small = {
         name: 'Verisign',
         label: 'Your Verisign username',
         url: 'http://{username}.pip.verisignlabs.com/'
-    },
-    vidoop: {
-        name: 'Vidoop',
-        label: 'Your Vidoop username',
-        url: 'http://{username}.myvidoop.com/'
     },
     verisign: {
         name: 'Verisign',
