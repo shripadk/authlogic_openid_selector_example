@@ -5,7 +5,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :login
       t.string :crypted_password
       t.string :password_salt
-      t.string :email, :null => false
+      t.string :email
       t.string :openid_identifier, :null => false
       t.string :persistence_token, :null => false
       t.integer :login_count, :default => 0, :null => false
@@ -14,6 +14,7 @@ class CreateUsers < ActiveRecord::Migration
       t.datetime :current_login_at
       t.string :last_login_ip
       t.string :current_login_ip
+      t.boolean :email_autoset, :default => false, :null => false
     end
     
     add_index :users, :login

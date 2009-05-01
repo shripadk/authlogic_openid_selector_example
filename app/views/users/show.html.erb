@@ -5,14 +5,18 @@
   </p>
 <% else %>
   <p>
-    <b>OpenID:</b>
+    <b>OpenID Identifier:</b>
     <%=h @user.openid_identifier %>
   </p>
 <% end %>
 
 <p>
   <b>Email:</b>
-  <%=h @user.email %>
+	<% if @user.email_autoset %>
+  	<%=h @user.email %>
+	<% else %>
+		OpenID Provider didn't return your email address or <br />I might haven't found out yet how to fetch it. :-)
+	<% end %>
 </p>
 
 <p>
