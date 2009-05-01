@@ -22,8 +22,9 @@ Live Example can be found here: http://openid-example.joontos.ch
 
 == Current Issues
 
-* Needs to be tested using other OpenID accounts besides Google and Yahoo
-* Yahoo currently doesn't provide the user's email by SReg or AX.
+* Needs to be tested using other OpenID accounts besides Google, Yahoo, Flickr and Technorati
+* The following OpenID authentication providers don't seem to support the exchange of the email address using SReg or AX: Yahoo, Technorati...
+* The following OpenID authentication providers don't seem to work at all: Flickr (replaced by Yahoo?)
 
 == TODO
 
