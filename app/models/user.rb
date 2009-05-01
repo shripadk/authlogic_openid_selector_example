@@ -3,9 +3,10 @@ class User < ActiveRecord::Base
     c.validate_login_field = false
     # optional, but if a user registers by openid, he should at least share his email-address with the app
     c.validate_email_field = false
-    # fetch the email either by sreg or ax
+    # fetch email by ax
     c.required_fields = ["http://axschema.org/contact/email"]
-    c.optional_fields = ["email","nickname"]
+    # fetch email by sreg
+    c.optional_fields = ["email"]
   end
   
   private
@@ -13,20 +14,20 @@ class User < ActiveRecord::Base
   def map_openid_registration(registration)
     
     if registration.empty?
-      # No email returned
+      # no email returned
       self.email_autoset = false
     else
-      # Email set by SREG?
+      # email by sreg
       unless registration["email"].nil? && registration["email"].blank? 
         self.email = registration["email"] 
         self.email_autoset = true
       else
-        # Email set by AX
+        # email by ax
         unless registration['http://axschema.org/contact/email'].nil? && registration['http://axschema.org/contact/email'].first.blank?
           self.email = registration['http://axschema.org/contact/email'].first
           self.email_autoset = true
         else
-          # registration-hash seems to contain information other than sreg- or ax-email
+          # registration-hash seems to contain information other than the email-address
           self.email_autoset = false
         end
       end
