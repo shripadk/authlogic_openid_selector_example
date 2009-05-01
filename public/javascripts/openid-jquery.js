@@ -75,6 +75,25 @@ var providers_small = {
         name: 'ClaimID',
         label: 'Your ClaimID username',
         url: 'http://claimid.com/{username}'
+    },
+    livedoor: {
+        name: 'LiveDoor',
+        label: 'Your LiveDoor username',
+        url: 'http://profile.livedoor.com/{username}'
+    },
+    smugmug: {
+        name: 'SmugMug',
+        label: 'Your SmugMug username',
+        url: 'http://{username}.smugmug.com/'
+    },
+    vox: {
+        name: 'Vox',
+        label: 'Your Vox member',
+        url: 'http://{username}.vox.com/'
+    },
+    orange: {
+        name: 'Orange',
+        url: 'http://openid.orange.fr/'
     }
 };
 var providers = $.extend({}, providers_large, providers_small);
