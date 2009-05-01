@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
     c.validate_email_field = false
     # fetch the email either by sreg or ax
     c.required_fields = ["http://axschema.org/contact/email"]
-    c.optional_fields = [:email, :nickname]
+    c.optional_fields = ["email","nickname"]
   end
   
   private
@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
       self.email_autoset = false
     else
       # Email set by SREG?
-      unless registration[:email].nil? && registration[:email].blank? 
-        self.email = registration[:email] 
+      unless registration["email"].nil? && registration["email"].blank? 
+        self.email = registration["email"] 
         self.email_autoset = true
       else
         # Email set by AX
