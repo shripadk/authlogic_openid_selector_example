@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
     c.validate_email_field = false
     # fetch email by ax
     c.openid_required_fields = [:email,"http://axschema.org/contact/email"]
+    #c.openid_required_fields = [:language, "http://axschema.org/pref/language"]
     #c.required_fields = ["http://axschema.org/contact/email"]
     # fetch email by sreg
     #c.optional_fields = ["email"]
