@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  
+  is_gravtastic :email
+  
   acts_as_authentic do |c| 
     c.validate_login_field = false
     # optional, but if a user registers by openid, he should at least share his email-address with the app
@@ -6,9 +9,14 @@ class User < ActiveRecord::Base
     # fetch email by ax
     c.openid_required_fields = [:email,"http://axschema.org/contact/email"]
     #c.openid_required_fields = [:language, "http://axschema.org/pref/language"]
-    #c.required_fields = ["http://axschema.org/contact/email"]
-    # fetch email by sreg
-    #c.optional_fields = ["email"]
+  end
+  
+  def before_connect(facebook_session)
+    self.name = facebook_session.user.name
+    self.birthday = facebook_session.user.birthday_date
+    self.about = facebook_session.user.about_me
+    self.locale = facebook_session.user.locale
+    #self.website = facebook_session.user.website
   end
   
   private

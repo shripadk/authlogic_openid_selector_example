@@ -95,7 +95,7 @@ var providers_small = {
         url: 'http://openid.orange.fr/'
     }
 };
-var providers = $.extend({}, providers_large, providers_small);
+var providers = jQuery.extend({}, providers_large, providers_small);
 
 var openid = {
 
@@ -110,12 +110,12 @@ var openid = {
 	
     init: function(input_id) {
         
-        var openid_btns = $('#openid_btns');
+        var openid_btns = jQuery('#openid_btns');
         
         this.input_id = input_id;
         
-        $('#openid_choice').show();
-        $('#openid_input_area').empty();
+        jQuery('#openid_choice').show();
+        jQuery('#openid_input_area').empty();
         
         // add box for each provider
         for (id in providers_large) {
@@ -131,7 +131,7 @@ var openid = {
 	        }
         }
         
-        $('#openid_form').submit(this.submit);
+        jQuery('#openid_form').submit(this.submit);
         
         var box_id = this.readCookie();
         if (box_id) {
@@ -167,7 +167,7 @@ var openid = {
 			
 			this.setOpenIdUrl(provider['url']);
 			if (! onload) {
-				$('#openid_form').submit();
+				jQuery('#openid_form').submit();
 			}	
 		}
     },
@@ -176,29 +176,29 @@ var openid = {
         
     	var url = openid.provider_url; 
     	if (url) {
-    		url = url.replace('{username}', $('#openid_username').val());
+    		url = url.replace('{username}', jQuery('#openid_username').val());
     		openid.setOpenIdUrl(url);
     	}
     	return true;
     },
     setOpenIdUrl: function (url) {
     
-    	var hidden = $('#'+this.input_id);
+    	var hidden = jQuery('#'+this.input_id);
     	if (hidden.length > 0) {
     		hidden.value = url;
     	} else {
-    		$('#openid_form').append('<input type="hidden" id="' + this.input_id + '" name="' + this.input_id + '" value="'+url+'"/>');
+    		jQuery('#openid_form').append('<input type="hidden" id="' + this.input_id + '" name="' + this.input_id + '" value="'+url+'"/>');
     	}
     },
     highlight: function (box_id) {
     	
     	// remove previous highlight.
-    	var highlight = $('#openid_highlight');
+    	var highlight = jQuery('#openid_highlight');
     	if (highlight) {
-    		highlight.replaceWith($('#openid_highlight a')[0]);
+    		highlight.replaceWith(jQuery('#openid_highlight a')[0]);
     	}
     	// add new highlight.
-    	$('.'+box_id).wrap('<div id="openid_highlight"></div>');
+    	jQuery('.'+box_id).wrap('<div id="openid_highlight"></div>');
     },
     setCookie: function (value) {
     
@@ -220,7 +220,7 @@ var openid = {
     },
     useInputBox: function (provider) {
    	
-		var input_area = $('#openid_input_area');
+		var input_area = jQuery('#openid_input_area');
 		
 		var html = '';
 		var id = 'openid_username';
@@ -242,6 +242,6 @@ var openid = {
 		input_area.empty();
 		input_area.append(html);
 
-		$('#'+id).focus();
+		jQuery('#'+id).focus();
     }
 };

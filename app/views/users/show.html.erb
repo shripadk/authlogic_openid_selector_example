@@ -1,7 +1,14 @@
+<% if @user.facebook_uid %>
+	<%= fb_profile_pic @user.facebook_uid, :size => :square, :class => 'profile_pic' %>
+<% else %>
+	<%= image_tag @user.gravatar_url %>
+<% end %>
+
 <% if @user.openid_identifier.blank? %>
   <p>
     <b>Login:</b>
     <%=h @user.login %>
+	<%=h @user.facebook_uid %>
   </p>
 <% else %>
   <p>

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	$(document).ready(function() {
+	jQuery(document).ready(function() {
 		openid.init('user_session[openid_identifier]');
 	});
 </script>
@@ -19,3 +19,5 @@
 		</div>
 	<% end %>
 <% end %>
+
+<%= authlogic_facebook_login_button %>
