@@ -27,9 +27,8 @@ Live Example can be found here: http://big-glow-mama.heroku.com
 
 == Status
 
-<b> * Auto-Register works now. Thanks to this commit:
-http://github.com/mreinsch/authlogic_openid/commit/4a1f644be36aec75ae2d35121904b5a846354233
- by mreinsch.</b>
+* <b>Auto-Register works now. Thanks to this commit:
+http://github.com/mreinsch/authlogic_openid/commit/4a1f644be36aec75ae2d35121904b5a846354233 by mreinsch.</b>
 * Fetching email using sreg and ax works
 * Flickr OpenID doesn't seem to work at all...
 * Facebook works... though logging out and trying to then use an Open ID provider a bit buggy <b> Removed Facebook for now. Till it is fixed. </b>
