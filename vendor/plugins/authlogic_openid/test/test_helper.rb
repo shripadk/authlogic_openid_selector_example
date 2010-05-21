@@ -2,6 +2,8 @@ require "test/unit"
 require "rubygems"
 require "ruby-debug"
 require "active_record"
+require "action_controller"
+require "action_controller/test_process"
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")
@@ -45,14 +47,33 @@ end
 
 require "active_record/fixtures"
 require "openid"
-Rails = true # to trick authlogic into loading the rails adapter
+
+module Rails
+  module VERSION
+    STRING = "2.3.5"
+  end
+end
+
 require File.dirname(__FILE__) + "/../../authlogic/lib/authlogic"
 require File.dirname(__FILE__) + "/../../authlogic/lib/authlogic/test_case"
-#require File.dirname(__FILE__) + "/libs/rails_trickery"
-require File.dirname(__FILE__) + '/libs/open_id_authentication/lib/open_id_authentication'
+require File.dirname(__FILE__) + '/../../open_id_authentication/lib/open_id_authentication'
+
+# this is partly from open_id_authentication/init.rb
+ActionController::Base.send :include, OpenIdAuthentication
+
 require File.dirname(__FILE__) + '/../lib/authlogic_openid'  unless defined?(AuthlogicOpenid)
 require File.dirname(__FILE__) + '/libs/user'
 require File.dirname(__FILE__) + '/libs/user_session'
+
+ActionController::Routing::Routes.draw do |map|
+  map.connect ':controller/:action/:id', :controller => 'session'
+end
+
+class SessionController < ActionController::Base
+  def default_template(action_name = self.action_name)
+    nil
+  end
+end
 
 class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
@@ -64,15 +85,33 @@ class ActiveSupport::TestCase
   setup :activate_authlogic
   
   private
-    def activate_authlogic
-      Authlogic::Session::Base.controller = controller
-    end
     
     def controller
-      @controller ||= Authlogic::ControllerAdapters::RailsAdapter.new(ActionController.new)
+      @controller ||= create_controller
+    end
+
+    def create_controller
+      @request = ActionController::TestRequest.new
+      @request.path_parameters = {:action => "index", :controller => "session"}
+      @response = ActionController::TestResponse.new
+
+      c = SessionController.new
+      c.params = {}
+      c.request = @request
+      c.response = @response
+      c.send(:reset_session)
+      c.send(:initialize_current_url)
+
+      Authlogic::ControllerAdapters::RailsAdapter.new(c)
     end
     
-    def redirecting_to_yahoo?
-      controller.redirecting_to.to_s =~ /^https:\/\/open.login.yahooapis.com\/openid\/op\/auth/
+    def assert_redirecting_to_yahoo(for_param)
+      [ /^OpenID identifier="https:\/\/me.yahoo.com\/a\/9W0FJjRj0o981TMSs0vqVxPdmMUVOQ--"/,
+        /return_to=\"http:\/\/test.host\/\?#{for_param}=1"/,
+        /method="post"/ ].each {|p| assert_match p, @response.headers["WWW-Authenticate"]}
+    end
+
+    def assert_not_redirecting
+      assert ! @response.headers["WWW-Authenticate"]
     end
 end

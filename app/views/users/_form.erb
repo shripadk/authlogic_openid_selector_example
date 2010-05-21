@@ -10,7 +10,7 @@
 		<div id="openid_btns"></div>
 	</div>
 	<div id="openid_input_area">
-		<%= form.text_field :openid_identifier %>
+		<%= form.text_field :openid_identifier, :value => "https://" %>
 		<%= form.submit "Create" %>
 	</div>	
 <% end %>

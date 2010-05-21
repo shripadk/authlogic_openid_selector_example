@@ -59,9 +59,9 @@ module AuthlogicOpenid
       end
       
       def openid_identifier=(value)
-        @openid_identifier = value.blank? ? nil : OpenIdAuthentication.normalize_identifier(value)
+        @openid_identifier = value.blank? ? nil : OpenID.normalize_url(value)
         @openid_error = nil
-      rescue OpenIdAuthentication::InvalidOpenId => e
+      rescue OpenID::DiscoveryFailure => e
         @openid_identifier = nil
         @openid_error = e.message
       end
@@ -69,13 +69,13 @@ module AuthlogicOpenid
       # Cleaers out the block if we are authenticating with OpenID, so that we can redirect without a DoubleRender
       # error.
       def save(&block)
-        block = nil if !openid_identifier.blank?
+        block = nil if !openid_identifier.blank? && controller.request.env[Rack::OpenID::RESPONSE].blank?
         super(&block)
       end
       
       private
         def authenticating_with_openid?
-          attempted_record.nil? && errors.empty? && (!openid_identifier.blank? || (controller.params[:open_id_complete] && controller.params[:for_session]))
+          attempted_record.nil? && errors.empty? && (!openid_identifier.blank? || (controller.using_open_id? && controller.params[:for_session]))
         end
         
         def find_by_openid_identifier_method
@@ -92,7 +92,14 @@ module AuthlogicOpenid
 
         def validate_by_openid
           self.remember_me = controller.params[:remember_me] == "true" if controller.params.key?(:remember_me)
-          controller.send(:authenticate_with_open_id, openid_identifier, :return_to => controller.url_for(:for_session => "1", :remember_me => remember_me?)) do |result, openid_identifier|
+          
+          options = {
+           :required => klass.openid_required_fields,
+           :optional => klass.openid_optional_fields,
+           :return_to => controller.url_for(:for_session => "1", :remember_me => remember_me?),
+           :method => :post}
+
+          controller.send(:authenticate_with_open_id, openid_identifier, options) do |result, openid_identifier, registration|
             if result.unsuccessful?
               errors.add_to_base(result.message)
               return
@@ -102,17 +109,23 @@ module AuthlogicOpenid
             
             if !attempted_record
               if auto_register?
-                self.attempted_record = klass.new :openid_identifier=>openid_identifier
-
-                if ! attempted_record.save
-                  errors.add(:openid_identifier, "error auto-registering new openid account")
+                auto_reg_record = create_open_id_auto_register_record(openid_identifier, registration)
+                if !auto_reg_record.save
+                  auto_reg_record.errors.each {|attr, msg| errors.add(attr, msg) }
+                else
+                  self.attempted_record = auto_reg_record
                 end
-                return
               else
                 errors.add(:openid_identifier, "did not match any users in our database, have you set up your account to use OpenID?")
-                return
               end
             end
+          end
+        end
+
+        def create_open_id_auto_register_record(openid_identifier, registration)
+          returning klass.new do |auto_reg_record|
+            auto_reg_record.openid_identifier = openid_identifier
+            auto_reg_record.send(:map_openid_registration, registration)
           end
         end
         

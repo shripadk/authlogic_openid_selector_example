@@ -14,7 +14,7 @@ class ActsAsAuthenticTest < ActiveSupport::TestCase
     user.email = "a@a.com"
     user.openid_identifier = "https://me.yahoo.com/a/9W0FJjRj0o981TMSs0vqVxPdmMUVOQ--"
     assert !user.save {} # because we are redirecting, the user was NOT saved
-    assert redirecting_to_yahoo?
+    assert_redirecting_to_yahoo "for_model"
   end
   
   def test_password_required_on_create
@@ -50,7 +50,7 @@ class ActsAsAuthenticTest < ActiveSupport::TestCase
   def test_setting_openid_identifier_changed_persistence_token
     ben = users(:ben)
     old_persistence_token = ben.persistence_token
-    ben.openid_identifier = "new"
+    ben.openid_identifier = "http://new"
     assert_not_equal old_persistence_token, ben.persistence_token
   end
   
@@ -69,7 +69,7 @@ class ActsAsAuthenticTest < ActiveSupport::TestCase
     ben = users(:ben)
     ben.openid_identifier = "https://me.yahoo.com/a/9W0FJjRj0o981TMSs0vqVxPdmMUVOQ--"
     assert !ben.save {} # because we are redirecting
-    assert redirecting_to_yahoo?
+    assert_redirecting_to_yahoo "for_model"
   end
   
   def test_updating_without_openid
@@ -78,14 +78,14 @@ class ActsAsAuthenticTest < ActiveSupport::TestCase
     ben.password = "test"
     ben.password_confirmation = "test"
     assert ben.save
-    assert !redirecting_to_yahoo?
+    assert_not_redirecting
   end
   
   def test_updating_without_validation
     ben = users(:ben)
     ben.openid_identifier = "https://me.yahoo.com/a/9W0FJjRj0o981TMSs0vqVxPdmMUVOQ--"
     assert ben.save(false)
-    assert !redirecting_to_yahoo?
+    assert_not_redirecting
   end
   
   def test_updating_without_a_block

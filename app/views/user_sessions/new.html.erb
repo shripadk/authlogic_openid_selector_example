@@ -14,10 +14,8 @@
 		</div>
 		
 		<div id="openid_input_area">
-			<%= text_field_tag 'openid_identifier', :id => 'openid_identifier', :value => 'http://'%>
+			<%= text_field_tag 'openid_identifier', :id => 'openid_identifier', :value => 'https://'%>
 			<%= submit_tag "Sign-In" %>
 		</div>
 	<% end %>
 <% end %>
-
-<%= authlogic_facebook_login_button %>

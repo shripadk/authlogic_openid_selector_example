@@ -35,7 +35,10 @@ Authlogic OpenID is an extension of the Authlogic library to add OpenID support.
 === 2. Install the openid_authentication plugin
 
   $ script/plugin install git://github.com/rails/open_id_authentication.git
-  $ rake open_id_authentication:db:create
+
+And make sure all required gems are installed:
+
+  rake gems:install
 
 For more information on how to configure the plugin, checkout it's README: http://github.com/rails/open_id_authentication/tree/master
 
@@ -69,6 +72,25 @@ That being said, you probably want to do this in your controllers. You should do
 You should save your @user objects this way as well, because you also want the user to verify that they own the OpenID identifier that they supplied.
 
 Notice we are saving with a block. Why? Because we need to redirect the user to their OpenID provider so that they can authenticate. When we do this, we don't want to execute that block of code, because if we do, we will get a DoubleRender error. This lets us skip that entire block and send the user along their way without any problems.
+
+=== 5. Check your validations / Auto registration
+
+In case you want to enable automatic user registrations with OpenID, enable this in your session:
+
+  class UserSession < Authlogic::Session::Base
+    auto_register
+  end
+
+In this case you migth also want to change the user object to no longer require a login:
+
+  class User < ActiveRecord::Base
+    acts_as_authentic do |c|
+      c.merge_validates_length_of_login_field_options(:unless => :using_openid?)
+      c.merge_validates_format_of_login_field_options(:unless => :using_openid?)
+    end
+  end
+
+=== 6. Done!
 
 That's it! The rest is taken care of for you.
 

@@ -1,13 +1,15 @@
 class UsersController < ApplicationController
+
   before_filter :require_no_user, :only => [:new, :create]
   before_filter :require_user, :only => [:show, :edit, :update, :destroy]
-  
+
   def new
     @user = User.new
   end
   
   def create
     @user = User.new(params[:user])
+    logger.info { "PARAMS FROM THE USER DUMPED HERE: #{params[:user]} "}
     @user.save do |result|
       if result
         flash[:notice] = "Account registered!"
@@ -29,6 +31,12 @@ class UsersController < ApplicationController
   def update
     @user = current_user # makes our views "cleaner" and more consistent
     @user.attributes = params[:user]
+    
+    
+    # if !@user.email.blank?
+    #       @user.email_autoset = true
+    #     end
+    
     @user.save do |result|
       if result
         flash[:notice] = "Account updated!"

@@ -1,6 +1,15 @@
 class User < ActiveRecord::Base
+  is_gravtastic :email, :filetype => :png, :default => "identicon", :size => 120
   
-  is_gravtastic :email
+  validates_uniqueness_of :name, :message => "should be unique!"
+  
+  def before_save
+    if self.name.nil? || self.name.blank?
+      self.name = "user#{Time.now.to_i}"
+    end
+  end 
+  
+  
   
   acts_as_authentic do |c| 
     c.validate_login_field = false
@@ -10,39 +19,25 @@ class User < ActiveRecord::Base
     c.openid_required_fields = [:email,"http://axschema.org/contact/email"]
     #c.openid_required_fields = [:language, "http://axschema.org/pref/language"]
   end
-  
-  def before_connect(facebook_session)
-    self.name = facebook_session.user.name
-    self.birthday = facebook_session.user.birthday_date
-    self.about = facebook_session.user.about_me
-    self.locale = facebook_session.user.locale
-    #self.website = facebook_session.user.website
-  end
+ 
   
   private
   
   def map_openid_registration(registration)
-    
-    if registration.empty?
-      # no email returned
-      self.email_autoset = false
-    else
-      # email by sreg
+    # email by sreg
       unless registration["email"].nil? && registration["email"].blank? 
-        self.email = registration["email"] 
-        self.email_autoset = true
-      else
-        # email by ax
-        unless registration['http://axschema.org/contact/email'].nil? && registration['http://axschema.org/contact/email'].first.blank?
-          self.email = registration['http://axschema.org/contact/email'].first
-          self.email_autoset = true
-        else
-          # registration-hash seems to contain information other than the email-address
-          self.email_autoset = false
-        end
+              self.email_autoset = true
+              self.email = registration["email"] 
       end
-    end
-
+      
+      # email by ax
+      unless registration['http://axschema.org/contact/email'].nil? && registration['http://axschema.org/contact/email'].first.blank?
+              self.email_autoset = true
+              self.email = registration['http://axschema.org/contact/email'].first
+          # else
+          #    # registration-hash seems to contain information other than the email-address
+          #            self.email_autoset = false
+      end
   end
   
 end

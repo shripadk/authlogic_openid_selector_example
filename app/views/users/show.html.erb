@@ -1,14 +1,13 @@
-<% if @user.facebook_uid %>
-	<%= fb_profile_pic @user.facebook_uid, :size => :square, :class => 'profile_pic' %>
-<% else %>
-	<%= image_tag @user.gravatar_url %>
-<% end %>
+<%= image_tag @user.gravatar_url %>
 
+  <p>
+    <b>Name:</b>
+    <%=h @user.name%>
+  </p>
 <% if @user.openid_identifier.blank? %>
   <p>
     <b>Login:</b>
     <%=h @user.login %>
-	<%=h @user.facebook_uid %>
   </p>
 <% else %>
   <p>
@@ -22,7 +21,7 @@
 	<% if @user.email_autoset %>
   	<%=h @user.email %>
 	<% else %>
-		OpenID Provider didn't return your email address or <br />I might haven't found out yet how to fetch it. :-)
+		Email Not Fetched as your OpenID Provider did not provide the required information. Will be fetched if found later or you can edit your account to provide the detail.
 	<% end %>
 </p>
 

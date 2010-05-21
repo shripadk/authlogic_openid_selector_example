@@ -53,9 +53,9 @@ module AuthlogicOpenid
       
       # Set the openid_identifier field and also resets the persistence_token if this value changes.
       def openid_identifier=(value)
-        write_attribute(:openid_identifier, value.blank? ? nil : OpenIdAuthentication.normalize_identifier(value))
+        write_attribute(:openid_identifier, value.blank? ? nil : OpenID.normalize_url(value))
         reset_persistence_token if openid_identifier_changed?
-      rescue OpenIdAuthentication::InvalidOpenId => e
+      rescue OpenID::DiscoveryFailure => e
         @openid_error = e.message
       end
       
@@ -86,11 +86,12 @@ module AuthlogicOpenid
             map_saved_attributes(session_class.controller.session[:openid_attributes])
             session_class.controller.session[:openid_attributes] = nil
           end
-          
-          options = {}
-          options[:required] = self.class.openid_required_fields
-          options[:optional] = self.class.openid_optional_fields
-          options[:return_to] = session_class.controller.url_for(:for_model => "1")
+
+          options = {
+           :required => self.class.openid_required_fields,
+           :optional => self.class.openid_optional_fields,
+           :return_to => session_class.controller.url_for(:for_model => "1"),
+           :method => :post }
           
           session_class.controller.send(:authenticate_with_open_id, openid_identifier, options) do |result, openid_identifier, registration|
             if result.unsuccessful?
@@ -154,7 +155,7 @@ module AuthlogicOpenid
         end
         
         def openid_complete?
-          session_class.controller.params[:open_id_complete] && session_class.controller.params[:for_model]
+          session_class.controller.using_open_id? && session_class.controller.params[:for_model]
         end
         
         def authenticate_with_openid?
