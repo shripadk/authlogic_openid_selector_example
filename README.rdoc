@@ -9,6 +9,8 @@ Live Example can be found here: http://big-glow-mama.heroku.com
 * Original Authlogic Example App: http://authlogicexample.binarylogic.com
 * Authlogic: http://github.com/binarylogic/authlogic
 * Authlogic OpenID: http://github.com/binarylogic/authlogic_openid
+
+
 * Auto_register version that works http://github.com/gaizka/authlogic_openid
 * Javascript OpenID-Selector (based on JQuery): http://code.google.com/p/openid-selector/
 * Facebook integration http://github.com/kalasjocke/authlogic_facebook_connect
