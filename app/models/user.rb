@@ -34,9 +34,6 @@ class User < ActiveRecord::Base
       unless registration['http://axschema.org/contact/email'].nil? && registration['http://axschema.org/contact/email'].first.blank?
               self.email_autoset = true
               self.email = registration['http://axschema.org/contact/email'].first
-          # else
-          #    # registration-hash seems to contain information other than the email-address
-          #            self.email_autoset = false
       end
   end
   

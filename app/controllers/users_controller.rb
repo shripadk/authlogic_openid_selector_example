@@ -32,11 +32,6 @@ class UsersController < ApplicationController
     @user = current_user # makes our views "cleaner" and more consistent
     @user.attributes = params[:user]
     
-    
-    # if !@user.email.blank?
-    #       @user.email_autoset = true
-    #     end
-    
     @user.save do |result|
       if result
         flash[:notice] = "Account updated!"

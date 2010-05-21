@@ -27,7 +27,6 @@
 
 
 <% if !current_user %>
-  <!-- <%= link_to "<strike>Register</strike>", new_account_path %> | -->
   <%= link_to "Log In", new_account_url %>
 <% else %>
   <%= link_to "My Account", account_path %> |
@@ -40,5 +39,8 @@
 
 <%= yield  %>
 
+<p>
+This is an example of how to use <a href="http://github.com/binarylogic/authlogic">Authlogic</a> in combination with the <br /><a href="http://code.google.com/p/openid-selector/">Javascript OpenID-Selector</a> in a <a href="http://rubyonrails.org/">Ruby on Rails</a> application. <%= link_to "More...", "http://github.com/vazqujav/authlogic_openid_selector_example" %>
+</p>
 </body>
 </html>
