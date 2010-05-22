@@ -15,13 +15,13 @@ Live Example can be found here: http://testingauth.heroku.com/
 * Javascript OpenID-Selector (based on JQuery): http://code.google.com/p/openid-selector/
 * Facebook integration http://github.com/kalasjocke/authlogic_facebook_connect
 * Inspiration http://github.com/vazqujav/authlogic_openid_selector_example
-
+* <b>Inspiration http://github.com/holden/authlogic_openid_selector_example</b>
 
 == What does this example app contain?
 
 1. OpenID User registration using Javascript OpenID-Selector.
 2. Automatically log users in upon successful OpenID registration, saving his OpenID identifier and (if returned) his email address.
-2b. Auto Registration of users, no registration required for first time Facebook/Google/Yahoo etc.
+2b. Auto Registration of users, no registration required for first time Google/Yahoo etc.
 3. A my account area where the user can view / delete his account.
 4. Login/Logout functionality.
 5. Automatically store information on the users and their session in the databases. Such as login count, IP address, when they logged in last, and when their last activity occurred.
@@ -34,14 +34,11 @@ http://github.com/mreinsch/authlogic_openid/commit/4a1f644be36aec75ae2d35121904b
 * Fetching email using sreg and ax works
 * Flickr OpenID doesn't seem to work at all...
 * Facebook works... though logging out and trying to then use an Open ID provider a bit buggy <b> Removed Facebook for now. Till it is fixed. </b>
-* Auto registration works but does not currently capture the email as it does during normal registration? http://stackoverflow.com/questions/1748629/authlogic-autoregister-feature-using-my-options
-
 
 
 == Todo
 
 * Use this application to build a Rails plugin...feel free to help me on this one!
-* Fix auto registration for correct capturing of emails and get rid of registration altogether
 * Replace Open ID registration with simple old school registration for users who don't want to use OpenID at all or facebook, etc.
 * Twitter addition? (OAuth)
 
