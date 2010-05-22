@@ -2,7 +2,7 @@
 
 This is an example of how to use Authlogic in combination with the Javascript OpenID-Selector and Facebook authentication thrown in a Rails app. 
 
-Live Example can be found here: http://big-glow-mama.heroku.com
+Live Example can be found here: http://testingauth.heroku.com/
 
 <b>Please check the following pages to find more information about the applications used to build this example:</b>
 
