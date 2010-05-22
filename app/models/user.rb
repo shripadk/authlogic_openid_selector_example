@@ -23,18 +23,28 @@ class User < ActiveRecord::Base
   
   private
   
-  def map_openid_registration(registration)
-    # email by sreg
-      unless registration["email"].nil? && registration["email"].blank? 
-              self.email_autoset = true
-              self.email = registration["email"] 
+    def map_openid_registration(registration)
+    
+    if registration.empty?
+      # no email returned
+      self.email_autoset = false
+    else
+      # email by sreg
+      unless registration["email"].nil? && registration["email"].blank?
+        self.email = registration["email"]
+        self.email_autoset = true
+      else
+        # email by ax
+        unless registration['http://axschema.org/contact/email'].nil? && registration['http://axschema.org/contact/email'].first.blank?
+          self.email = registration['http://axschema.org/contact/email'].first
+          self.email_autoset = true
+        else
+          # registration-hash seems to contain information other than the email-address
+          self.email_autoset = false
+        end
       end
-      
-      # email by ax
-      unless registration['http://axschema.org/contact/email'].nil? && registration['http://axschema.org/contact/email'].first.blank?
-              self.email_autoset = true
-              self.email = registration['http://axschema.org/contact/email'].first
-      end
+    end
+
   end
   
 end
